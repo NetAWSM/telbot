@@ -109,7 +109,7 @@ func handleStartCommand(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 /delete [ID] - Удалить сообщение по ID
 /clear - Удалить все сообщения (подтверждение)
 
-Просто отправьте мне любой текст, и я его сохрану!
+Просто отправьте мне любой текст, и я его сохраню!
     `, userName)
 
 	sendMessage(bot, chatID, welcomeText)

@@ -34,7 +34,9 @@ func InitDB(dbPath string) error {
 
 // createTables создает необходимые таблицы
 func createTables() error {
+
 	// Таблица пользователей
+
 	createUsersTable := `
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY,
@@ -55,6 +57,17 @@ func createTables() error {
         FOREIGN KEY (user_id) REFERENCES users (id)
     )`
 
+	// Таблица фильмов
+	createFilms := `
+	CREATE TABLE IF NOT EXISTS films (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chat_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        films TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+		)`
+
 	// Создаем таблицу пользователей
 	if _, err := DB.Exec(createUsersTable); err != nil {
 		return err
@@ -65,12 +78,26 @@ func createTables() error {
 		return err
 	}
 
+	// Создаем таблицу фильмов
+	if _, err := DB.Exec(createFilms); err != nil {
+		return err
+	}
+
 	// Создаем индекс для быстрого поиска сообщений по chat_id
-	createIndex := `
+	createIndexMessages := `
     CREATE INDEX IF NOT EXISTS idx_messages_chat_id 
     ON messages (chat_id)`
 
-	if _, err := DB.Exec(createIndex); err != nil {
+	// Создаем индекс для быстрого поиска сообщений по chat_id
+	createIndexFilms := `
+    CREATE INDEX IF NOT EXISTS idx_messages_chat_id 
+    ON messages (chat_id)`
+
+	if _, err := DB.Exec(createIndexMessages); err != nil {
+		return err
+	}
+
+	if _, err := DB.Exec(createIndexFilms); err != nil {
 		return err
 	}
 
